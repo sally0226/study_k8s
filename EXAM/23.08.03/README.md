@@ -15,7 +15,10 @@ kubectl create deployment daisy-deployment --image=nginx --replicas=2 --namespac
 
 # Exam 4
 ```shell
+kubectl get deployments daisy-deployment -n exam-daisy -o=custom-columns='DEPLOYMENT:metadata.name','CONTAINER_IMAGE:spec.template.spec.containers[*].image','READY_REPLICAS:spec.replicas','NAMESPACE:metadata.namespace'
 ```
+
+`-o=custom-output='<header>:<json-path-expr>'`
 
 # Exam 5
 - 
@@ -24,77 +27,13 @@ kubectl create deployment nginx-deployment --image=nginx:1.16 --replicas=1 --nam
 # deployment.apps/nginx-deployment created
 
 kubectl describe deployment --namespace=exam-daisy nginx-deployment
-# Name:                   nginx-deployment
-# Namespace:              exam-daisy
-# CreationTimestamp:      Thu, 03 Aug 2023 18:08:06 +0900
-# Labels:                 app=nginx-deployment
-# Annotations:            deployment.kubernetes.io/revision: 1
-# Selector:               app=nginx-deployment
-# Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
-# StrategyType:           RollingUpdate
-# MinReadySeconds:        0
-# RollingUpdateStrategy:  25% max unavailable, 25% max surge
-# Pod Template:
-#   Labels:  app=nginx-deployment
-#   Containers:
-#    nginx:
-#     Image:        nginx:1.16
-#     Port:         <none>
-#     Host Port:    <none>
-#     Environment:  <none>
-#     Mounts:       <none>
-#   Volumes:        <none>
-# Conditions:
-#   Type           Status  Reason
-#   ----           ------  ------
-#   Available      True    MinimumReplicasAvailable
-#   Progressing    True    NewReplicaSetAvailable
-# OldReplicaSets:  <none>
-# NewReplicaSet:   nginx-deployment-66fff56987 (1/1 replicas created)
-# Events:
-#   Type    Reason             Age   From                   Message
-#   ----    ------             ----  ----                   -------
-#   Normal  ScalingReplicaSet  97s   deployment-controller  Scaled up replica set nginx-deployment-66fff56987 to 1
 
 kubectl set image deployment --namespace=exam-daisy nginx-deployment nginx=n
-ginx:1.17
+ginx:1.17 --record
 # deployment.apps/nginx-deployment image updated
-
-kubectl describe deployment --namespace=exam-daisy nginx-deployment
-# Name:                   nginx-deployment
-# Namespace:              exam-daisy
-# CreationTimestamp:      Thu, 03 Aug 2023 18:08:06 +0900
-# Labels:                 app=nginx-deployment
-# Annotations:            deployment.kubernetes.io/revision: 2
-# Selector:               app=nginx-deployment
-# Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
-# StrategyType:           RollingUpdate
-# MinReadySeconds:        0
-# RollingUpdateStrategy:  25% max unavailable, 25% max surge
-# Pod Template:
-#   Labels:  app=nginx-deployment
-#   Containers:
-#    nginx:
-#     Image:        nginx:1.17
-#     Port:         <none>
-#     Host Port:    <none>
-#     Environment:  <none>
-#     Mounts:       <none>
-#   Volumes:        <none>
-# Conditions:
-#   Type           Status  Reason
-#   ----           ------  ------
-#   Available      True    MinimumReplicasAvailable
-#   Progressing    True    NewReplicaSetAvailable
-# OldReplicaSets:  <none>
-# NewReplicaSet:   nginx-deployment-7445c994b8 (1/1 replicas created)
-# Events:
-#   Type    Reason             Age    From                   Message
-#   ----    ------             ----   ----                   -------
-#   Normal  ScalingReplicaSet  4m27s  deployment-controller  Scaled up replica set nginx-deployment-66fff56987 to 1
-#   Normal  ScalingReplicaSet  5s     deployment-controller  Scaled up replica set nginx-deployment-7445c994b8 to 1
-#   Normal  ScalingReplicaSet  3s     deployment-controller  Scaled down replica set nginx-deployment-66fff56987 to 0 from 1
 ```
+
+`--record` 옵션을 사용하면 변경사항을 annotation에 기록할 수 있다. (그치만 deprecated... 예정)
 
 # Exam 6
 ```shell
